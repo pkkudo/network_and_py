@@ -63,7 +63,7 @@ def main():
         "timeout": 5,
     }
 
-    for device, i in enumerate(target_devices, 1):
+    for i, device in enumerate(target_devices, 1):
         # skipping empty or commented out line
         if not device or re.match('^#', device):
             logger.info(f'Skipping "{device}" at line {i}')
