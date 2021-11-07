@@ -60,7 +60,7 @@ def parse_options():
     parser = argparse.ArgumentParser(add_help=True,
         description='Go gets show interface from a remote device.')
 
-    parser.add_argument('target', nargs='?', help='specify target device')
+    parser.add_argument('target', nargs='?', help='specify target device - "192.168.1.1", "router.example.net", "customport.example.com:9022"')
     parser.add_argument('--list', '-l', action='store_true', help='use list given in the file')
     parser.add_argument('--file', '-f', default='etc/device_list.txt', help='list file to use - default=etc/device_list.txt')
 
@@ -125,6 +125,9 @@ def main():
                 # write the retrieved information to a file
                 f_out = '/'.join([dir_out, device])
                 f_out += '_show_int.json'
+                # replace ":" in the output file name
+                if "port" in target.keys():
+                    f_out = f_out.replace(':', '_p')
                 with open(f_out, 'w') as salida:
                     salida.write(json.dumps(dct_int, indent=2))
                     logger.info(f'Info written in {f_out}')
