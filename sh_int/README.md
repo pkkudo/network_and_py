@@ -15,4 +15,4 @@ Run `show int` on Cisco IOS device using [netmiko](https://github.com/ktbyers/ne
   - `python show_int5.py --socks_proxy 192.168.1.2`
 - [ ] use netmiko SSHDetect and save the result
 - [ ] use SSHDetect result
-- [ ] ...
+- [ ] label/group devices and execute the script against the specific target set
