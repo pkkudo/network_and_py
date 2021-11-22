@@ -85,6 +85,7 @@ def main():
         target_devices.append(options.target)
     elif options.list:
         try:
+            f_device_list = options.file
             with open(f_device_list, 'r') as entrada:
                 target_devices = entrada.read().splitlines()
         except:
