@@ -2,6 +2,24 @@
 
 Run `show int` on Cisco IOS device using [netmiko](https://github.com/ktbyers/netmiko).
 
+# Setup
+
+1. (optional) use venv
+2. install requirements
+3. (optional) update `etc/.env` file
+
+```
+python3 -m venv venv
+source venv/bin/activate
+python -m pip install -U pip
+python -m pip install -r requirements.txt
+# edit etc/.env file to have the scripts use username/password in the file
+# then execute the scripts
+```
+
+"sh_int1.py" for example tries to load etc/.env file to get the credential to use, and if not found, the script prompts user to manually input each time you run this script. The destination host/ipaddr and the netmiko "device_type" is hardcoded in the script. 
+
+
 # todos
 
 - [x] use netmiko ConnectHandler to access single device and get `show int` output and write it in a file
