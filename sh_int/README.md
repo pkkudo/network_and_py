@@ -17,7 +17,7 @@ python -m pip install -r requirements.txt
 # then execute the scripts
 ```
 
-"sh_int1.py" for example tries to load etc/.env file to get the credential to use, and if not found, the script prompts user to manually input each time you run this script. The destination host/ipaddr and the netmiko "device_type" is hardcoded in the script. 
+"sh_int1.py" for example tries to load etc/.env file to get the credential to use, and if not found, the script prompts user to manually input each time you run this script. The destination host/ipaddr and the netmiko "device_type" is hardcoded in the script.
 
 
 # todos
@@ -31,6 +31,7 @@ python -m pip install -r requirements.txt
   - run `ssh -D {port} {server}` to establish dynamic port forwarding before running the script
   - example) ssh -D 1080 10.5.5.5
   - `python show_int5.py --socks_proxy 192.168.1.2`
-- [ ] use netmiko SSHDetect and save the result
+- [x] use netmiko SSHDetect and save the result
+  - `ssh_autodetect.py`
 - [ ] use SSHDetect result
 - [ ] label/group devices and execute the script against the specific target set
