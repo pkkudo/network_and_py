@@ -1,6 +1,6 @@
 # general
 __author__ = 'pkkudo@github'
-__version__ = '1.20211126'
+__version__ = '0.20211127'
 import sys
 import os
 from getpass import getpass  # if not passing credentials from etc/.env file
