@@ -140,11 +140,11 @@ def main():
             logger.info(f'Skipping "{device}" at line {i}')
             continue
         # check if successfully connected previously
-        print(options.target)
-        if options.target:
-            print("target")
-        if not options.all or options.target:
-            if os.path.exists(f_inventory):
+        if not options.all:
+            # but forget about the previous result when just checking single target
+            if options.target:
+                pass
+            elif os.path.exists(f_inventory):
                 try:
                     with open(f_inventory, 'r') as entrada:
                         o = json.load(entrada)
