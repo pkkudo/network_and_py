@@ -140,7 +140,10 @@ def main():
             logger.info(f'Skipping "{device}" at line {i}')
             continue
         # check if successfully connected previously
-        if not options.all:
+        print(options.target)
+        if options.target:
+            print("target")
+        if not options.all or options.target:
             if os.path.exists(f_inventory):
                 try:
                     with open(f_inventory, 'r') as entrada:
@@ -193,6 +196,10 @@ def main():
                     dct_inventory[i]["jump_server"] = px
             except UnboundLocalError:
                 pass
+
+    if options.target:
+        # when working with only one target, do not bother with the inventory file
+        return 0
 
     # save the result in files
     lst_headers = ["_id", "device", "netmiko_sshdetect", "last_connected_utc", "jump_server"]
