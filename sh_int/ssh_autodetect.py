@@ -1,6 +1,6 @@
 # general
 __author__ = 'pkkudo@github'
-__version__ = '0.20211127'
+__version__ = '1.20211127'
 import sys
 import os
 from getpass import getpass  # if not passing credentials from etc/.env file
@@ -19,6 +19,7 @@ import json
 import re
 import argparse
 import csv
+from datetime import datetime
 
 # env and config
 from dotenv import load_dotenv
@@ -120,19 +121,17 @@ def main():
             logger.exception(f'Failed to load target device list from {f_device_list}')
             sys.exit(1)
 
-    # setting device type, credentials, and timeout
-    target = {
-        #"device_type": 'autodetect',
-        "host": '',
-        "username": username,
-        "password": password,
-        "secret": secret,
-        "timeout": 5,
-    }
-
     dct_inventory = {}
     for i, device in enumerate(target_devices, 1):
-        target["device_type"] = "autodetect"
+        # setting device type, credentials, and timeout
+        target = {
+            "device_type": 'autodetect',
+            "host": '',
+            "username": username,
+            "password": password,
+            "secret": secret,
+            "timeout": 5,
+        }
         best_match = ''
         timestamp = ''
         logger.info(f'Working on {device}')
@@ -151,6 +150,7 @@ def main():
                                 logger.info(f'ssh_autodetect data for {device} already in {f_inventory}')
                                 dct_inventory[i] = o[item]
                                 continue
+                        continue
                 except:
                     logger.info(f'Failed to find the previous ssh_autodetect result for {device} in {f_inventory}')
         target['host'] = device
@@ -162,11 +162,11 @@ def main():
             target['port'] = port
         # get information from a remote device
         try:
-            with SSHDetect(**target) as guesser:
-                logger.info(f"Connected - {device}")
-                timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M")
-                best_match = guesser.autodetect()
-                logger.info(f"netmiko device_type guesser - {device}: {best_match}")
+            guesser = SSHDetect(**target)
+            logger.info(f"Connected - {device}")
+            timestamp = datetime.utcnow().strftime("%Y%m%d-%H%M")
+            best_match = guesser.autodetect()
+            logger.info(f"netmiko device_type guesser - {device}: {best_match}")
             # update target dictionary when successful
             target["device_type"] = best_match
         except NetmikoTimeoutException:
@@ -187,12 +187,12 @@ def main():
             }
             if timestamp:
                 dct_inventory[i]["last_connected_utc"] = timestamp
-            if proxy_server and proxy_port:
-                px = proxy_server + ':' + proxy_port
-                dct_inventory[i]["jump_server"] = px
-            # clean up "port"
-            if "port" in target.keys():
-                del target["port"]
+            try:
+                if proxy_server and proxy_port:
+                    px = proxy_server + ':' + str(proxy_port)
+                    dct_inventory[i]["jump_server"] = px
+            except UnboundLocalError:
+                pass
 
     # save the result in files
     lst_headers = ["_id", "device", "netmiko_sshdetect", "last_connected_utc", "jump_server"]
